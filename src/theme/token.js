@@ -11,7 +11,7 @@ export const tokens = {
   },
 
   font: {
-    display:  '"Neue Montreal", sans-serif',
+    display:  '"Syne", sans-serif',
     body:     '"DM Sans", sans-serif',
     mono:     '"JetBrains Mono", monospace',
   },
