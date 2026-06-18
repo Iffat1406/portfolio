@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import HeroCanvas from './HeroCanvas';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -69,6 +70,7 @@ const Hero = ({ ready }) => {
     <Section ref={sectionRef}>
       <GridBg />
       <Glow />
+      <HeroCanvas />
 
       <Inner>
         <TopRow>
@@ -153,7 +155,7 @@ const Glow = styled.div`
 
 const Inner = styled.div`
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
