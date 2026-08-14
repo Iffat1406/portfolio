@@ -6,17 +6,13 @@ import { Link } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const NAV_LINKS = [
-  { label: 'Work',    path: '/'        },
-  { label: 'About',   path: '/about'   },
-  { label: 'Process', path: '/process' },
-];
+import { PROFILE, SOCIALS } from '../data/profile';
 
-const SOCIALS = [
-  { label: 'GitHub',   href: 'https://github.com'   },
-  { label: 'LinkedIn', href: 'https://linkedin.com' },
-  { label: 'Twitter',  href: 'https://twitter.com'  },
-  { label: 'Dribbble', href: 'https://dribbble.com' },
+const NAV_LINKS = [
+  { label: 'Work',       path: '/'           },
+  { label: 'About',      path: '/about'      },
+  { label: 'Experience', path: '/experience' },
+  { label: 'Skills',     path: '/skills'     },
 ];
 
 const Footer = () => {
@@ -70,9 +66,9 @@ const Footer = () => {
     <Section ref={sectionRef}>
       <Inner>
         <CtaBlock>
-          <CtaEyebrow>Let&apos;s build something</CtaEyebrow>
+          <CtaEyebrow>Open to new opportunities</CtaEyebrow>
           <CtaLines>
-            {["LET'S WORK", 'TOGETHER.'].map(line => (
+            {["LET'S BUILD", 'SOMETHING.'].map(line => (
               <CtaLineWrap key={line}>
                 <CtaLine className="footer-cta-line">{line}</CtaLine>
               </CtaLineWrap>
@@ -81,14 +77,17 @@ const Footer = () => {
           <EmailWrap>
             <EmailLink
               ref={emailRef}
-              href="mailto:hello@iffat.dev"
+              href={`mailto:${PROFILE.email}`}
               data-hover
               onMouseMove={handleMagnet}
               onMouseLeave={handleMagnetLeave}
             >
-              hello@iffat.dev
+              {PROFILE.email}
               <EmailArrow>&#8599;</EmailArrow>
             </EmailLink>
+            <PhoneLink href={`tel:${PROFILE.phoneRaw}`} data-hover>
+              {PROFILE.phone}
+            </PhoneLink>
           </EmailWrap>
         </CtaBlock>
 
@@ -96,7 +95,7 @@ const Footer = () => {
 
         <BottomBar className="footer-bottom">
           <FooterLogo to="/" className="footer-fade">
-            Iffat<LogoAccent>.</LogoAccent>
+            {PROFILE.firstName}<LogoAccent>.</LogoAccent>
           </FooterLogo>
 
           <NavRow>
@@ -123,7 +122,7 @@ const Footer = () => {
           </SocialRow>
 
           <Copyright className="footer-fade">
-            &copy; 2024 Iffat Shaikh
+            &copy; {new Date().getFullYear()} {PROFILE.name} — {PROFILE.location}
           </Copyright>
         </BottomBar>
       </Inner>
@@ -180,6 +179,23 @@ const CtaLine = styled.h2`
 
 const EmailWrap = styled.div`
   margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: flex-start;
+`;
+
+const PhoneLink = styled.a`
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: ${({ theme }) => theme.colors.textSubtle};
+  text-decoration: none;
+  transition: color 0.25s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.accent};
+  }
 `;
 
 const EmailLink = styled.a`

@@ -3,15 +3,9 @@ import styled from 'styled-components';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { PROFILE, STATS, SKILL_PILLS as SKILLS } from '../data/profile';
+
 gsap.registerPlugin(ScrollTrigger);
-
-const STATS = [
-  { num: 5,  suffix: '+', label: 'Years Experience'   },
-  { num: 40, suffix: '+', label: 'Projects Delivered' },
-  { num: 15, suffix: '+', label: 'Happy Clients'      },
-];
-
-const SKILLS = ['React', 'TypeScript', 'Next.js', 'GSAP', 'Three.js', 'Figma', 'Node.js', 'Tailwind'];
 
 const About = () => {
   const sectionRef = useRef(null);
@@ -68,22 +62,20 @@ const About = () => {
         <Left>
           <SmallTag className="about-item">About Me</SmallTag>
           <Headline className="about-item">
-            Crafting interfaces<br />that feel <Italic>alive</Italic>.
+            Systems that run<br />when it <Italic>matters</Italic>.
           </Headline>
-          <Bio className="about-item">
-            I&apos;m Iffat Shaikh, a creative developer and designer based in India.
-            I specialise in building high-performance, visually rich web experiences
-            that merge clean engineering with expressive design — from smooth
-            micro-interactions to immersive WebGL scenes.
-          </Bio>
+          <Bio className="about-item">{PROFILE.bio}</Bio>
           <SkillGrid className="about-item">
             {SKILLS.map(s => (
               <SkillPill key={s}>{s}</SkillPill>
             ))}
           </SkillGrid>
           <CtaRow className="about-item">
-            <CtaLink href="mailto:hello@iffat.dev" data-hover>
-              hello@iffat.dev <Arrow>&#8599;</Arrow>
+            <CtaLink href={`mailto:${PROFILE.email}`} data-hover>
+              {PROFILE.email} <Arrow>&#8599;</Arrow>
+            </CtaLink>
+            <CtaLink href={`tel:${PROFILE.phoneRaw}`} data-hover>
+              {PROFILE.phone} <Arrow>&#8599;</Arrow>
             </CtaLink>
           </CtaRow>
         </Left>
@@ -182,7 +174,11 @@ const SkillPill = styled.span`
   }
 `;
 
-const CtaRow = styled.div``;
+const CtaRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2rem;
+`;
 
 const CtaLink = styled.a`
   display: inline-flex;

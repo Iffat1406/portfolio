@@ -3,46 +3,10 @@ import styled from 'styled-components';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
+import { Link } from 'react-router-dom';
+import { PROJECTS } from '../data/profile';
 
-const PROJECTS = [
-  {
-    id: 1,
-    num: '01',
-    title: 'LUMIÈRE',
-    category: 'E-Commerce',
-    tags: ['React', 'GSAP', 'Shopify'],
-    year: '2024',
-    gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-  },
-  {
-    id: 2,
-    num: '02',
-    title: 'VERSE',
-    category: 'Music Platform',
-    tags: ['Next.js', 'WebGL', 'Three.js'],
-    year: '2024',
-    gradient: 'linear-gradient(135deg, #1a0533 0%, #2d0066 50%, #4a00a0 100%)',
-  },
-  {
-    id: 3,
-    num: '03',
-    title: 'ATLAS',
-    category: 'Travel & Maps',
-    tags: ['React', 'Mapbox', 'Node.js'],
-    year: '2023',
-    gradient: 'linear-gradient(135deg, #0d2b1d 0%, #1a4a2e 50%, #2d7a4f 100%)',
-  },
-  {
-    id: 4,
-    num: '04',
-    title: 'NOIR',
-    category: 'Photography',
-    tags: ['Next.js', 'Framer Motion', 'Prismic'],
-    year: '2023',
-    gradient: 'linear-gradient(135deg, #1c1c1c 0%, #2d2d2d 50%, #444 100%)',
-  },
-];
+gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
   const [hovered, setHovered] = useState(null);
@@ -119,7 +83,7 @@ const Work = () => {
         <SectionHeader>
           <HeaderInner className="work-header-inner">
             <SectionLabel>Selected Work</SectionLabel>
-            <SectionCount>({PROJECTS.length.toString().padStart(2, '0')} Projects)</SectionCount>
+            <SectionCount>({PROJECTS.length.toString().padStart(2, '0')} Systems in Production)</SectionCount>
           </HeaderInner>
         </SectionHeader>
 
@@ -138,11 +102,15 @@ const Work = () => {
               <RowTags>
                 {p.tags.map(t => <RowTag key={t}>{t}</RowTag>)}
               </RowTags>
-              <RowYear>{p.year}</RowYear>
+              <RowYear>{p.yearShort}</RowYear>
               <RowArrow $visible={hovered === p.id}>&#8599;</RowArrow>
             </Row>
           ))}
         </Rows>
+
+        <ViewAll to="/projects" data-hover>
+          View all projects <Arrow>&#8599;</Arrow>
+        </ViewAll>
       </Inner>
 
       {/* Floating hover image */}
@@ -285,6 +253,37 @@ const RowArrow = styled.span`
   opacity: ${({ $visible }) => $visible ? 1 : 0};
   transform: ${({ $visible }) => $visible ? 'translate(0,0)' : 'translate(-6px,6px)'};
   transition: opacity 0.25s ease, transform 0.25s ease;
+`;
+
+const ViewAll = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 2.5rem;
+  padding-bottom: 0.3rem;
+  width: fit-content;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-decoration: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  transition: color 0.25s ease, border-color 0.25s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.accent};
+    border-color: ${({ theme }) => theme.colors.accent};
+  }
+`;
+
+const Arrow = styled.span`
+  display: inline-block;
+  transition: transform 0.3s ease;
+
+  ${ViewAll}:hover & {
+    transform: translate(3px, -3px);
+  }
 `;
 
 const FloatingImg = styled.div`

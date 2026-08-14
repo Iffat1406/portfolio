@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import HeroCanvas from './HeroCanvas';
+import { PROFILE, CORE_STACK } from '../data/profile';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HEADLINE = ['CREATIVE', 'DEVELOPER.'];
-const TAGS     = ['React', 'GSAP', 'Three.js', 'Figma', 'Node.js'];
+const HEADLINE = ['FULL STACK', 'DEVELOPER.'];
+const TAGS     = CORE_STACK;
 
 const Hero = ({ ready }) => {
   const sectionRef = useRef(null);
@@ -78,7 +79,7 @@ const Hero = ({ ready }) => {
             <BadgePulse />
             Available for work
           </Badge>
-          <IndexNum className="hero-fade">Portfolio 2024</IndexNum>
+          <IndexNum className="hero-fade">Software Engineer @ KVAR Technologies</IndexNum>
         </TopRow>
 
         <HeadingArea className="hero-heading">
@@ -92,8 +93,8 @@ const Hero = ({ ready }) => {
         <BottomRow>
           <DescBlock>
             <Desc className="hero-fade">
-              I design &amp; build digital experiences<br />
-              crafting beauty with purpose.
+              I build real-time manufacturing &amp; IoT<br />
+              systems that run in production.
             </Desc>
             <TagRow>
               {TAGS.map((t) => (
@@ -103,8 +104,11 @@ const Hero = ({ ready }) => {
           </DescBlock>
 
           <MetaBlock>
-            <MetaItem className="hero-fade">Based in India</MetaItem>
-            <MetaItem className="hero-fade">Iffat Shaikh</MetaItem>
+            <MetaItem className="hero-fade">Based in {PROFILE.location}</MetaItem>
+            <MetaItem className="hero-fade">{PROFILE.name}</MetaItem>
+            <MetaEmail className="hero-fade" href={`mailto:${PROFILE.email}`} data-hover>
+              {PROFILE.email}
+            </MetaEmail>
           </MetaBlock>
         </BottomRow>
 
@@ -284,6 +288,19 @@ const MetaItem = styled.span`
   font-size: 0.78rem;
   letter-spacing: 0.06em;
   color: ${({ theme }) => theme.colors.textSubtle};
+`;
+
+const MetaEmail = styled.a`
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-decoration: none;
+  transition: color 0.25s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.accent};
+  }
 `;
 
 const Divider = styled.hr`

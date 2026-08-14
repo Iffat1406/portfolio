@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import AboutStats from '../components/About';
 import Footer     from '../components/Footer';
+import { TIMELINE, VALUES, PROFILE } from '../data/profile';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -129,23 +130,6 @@ const OrbMount = styled.div`
   }
 `;
 
-// ─── Page data ────────────────────────────────────────────────────────────────
-
-const TIMELINE = [
-  { year: '2019', text: 'Started building UIs with React and vanilla CSS. Fell in love with the creative side of the web.' },
-  { year: '2020', text: 'Specialised in GSAP animation. First paid project — an interactive landing page for a music label.' },
-  { year: '2021', text: 'First major client: built an interactive brand experience reaching 100k+ monthly visitors.' },
-  { year: '2022', text: 'Deep-dived into WebGL and Three.js. Started blending visual design with creative engineering.' },
-  { year: '2023', text: 'Led front-end for a seed-stage startup from design system to production in 12 weeks.' },
-  { year: '2024', text: 'Open for new collaborations — building the next ambitious digital experience.' },
-];
-
-const VALUES = [
-  { icon: '◈', title: 'Obsessive Detail', desc: 'Every pixel, every transition, every micro-interaction. Perfection is the baseline, not the goal.' },
-  { icon: '◎', title: 'Performance First', desc: 'Beautiful code is also fast code. Lighthouse 95+ isn\'t a nice-to-have — it\'s a requirement.' },
-  { icon: '◇', title: 'Human-Centred', desc: 'Technology in service of people. The best interface is the one nobody consciously notices.' },
-];
-
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 const About = () => {
@@ -198,7 +182,8 @@ const About = () => {
             ))}
           </HeroLines>
           <HeroSub className="about-hero-fade">
-            Creative developer, design enthusiast,<br />and perpetual learner based in India.
+            Full stack developer, systems thinker and perpetual<br />
+            learner based in {PROFILE.location}.
           </HeroSub>
         </HeroContent>
       </HeroSection>
@@ -208,7 +193,7 @@ const About = () => {
         <TlInner>
           <TlHeader>
             <TlLabel>Journey</TlLabel>
-            <TlYears>2019 — 2024</TlYears>
+            <TlYears>{TIMELINE[0].year} — {TIMELINE[TIMELINE.length - 1].year}</TlYears>
           </TlHeader>
           <TlList>
             {TIMELINE.map(({ year, text }) => (

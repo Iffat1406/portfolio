@@ -3,12 +3,14 @@ import { useLocation, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { gsap } from 'gsap';
 import ThemeToggle from './ToggleTheme';
+import { PROFILE } from '../data/profile';
 
 const LINKS = [
-  { label: 'Work',    path: '/'        },
-  { label: 'About',   path: '/about'   },
-  { label: 'Process', path: '/process' },
-  { label: 'Journal', path: '/journal' },
+  { label: 'Work',       path: '/'           },
+  { label: 'About',      path: '/about'      },
+  { label: 'Experience', path: '/experience' },
+  { label: 'Projects',   path: '/projects'   },
+  { label: 'Skills',     path: '/skills'     },
 ];
 
 export const Navbar = () => {
@@ -88,7 +90,7 @@ export const Navbar = () => {
       <Nav ref={navRef}>
         <Logo ref={logoRef} to="/">
           <LogoDot />
-          Iffat<Accent>.</Accent>
+          {PROFILE.firstName}<Accent>.</Accent>
         </Logo>
 
         <Links>
@@ -107,13 +109,15 @@ export const Navbar = () => {
 
         <Right ref={rightRef}>
           <Status>
-            <StatusDot /> Available
+            <StatusDot /> Open to work
           </Status>
 
           <ThemeToggle />
 
           <CtaBtn
             ref={ctaRef}
+            href={`mailto:${PROFILE.email}`}
+            data-hover
             onMouseMove={e => handleMagnet(e, ctaRef.current)}
             onMouseLeave={() => handleMagnetLeave(ctaRef.current)}
           >
@@ -139,7 +143,7 @@ export const Navbar = () => {
             {label}
           </MobileLink>
         ))}
-        <MobileCta href="mailto:hello@iffat.dev">hello@iffat.dev</MobileCta>
+        <MobileCta href={`mailto:${PROFILE.email}`}>{PROFILE.email}</MobileCta>
       </MobileMenu>
     </>
   );
@@ -247,7 +251,7 @@ const StatusDot = styled.span`
   }
 `;
 
-const CtaBtn = styled.button`
+const CtaBtn = styled.a`
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -259,6 +263,7 @@ const CtaBtn = styled.button`
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  text-decoration: none;
   border-radius: 9999px;
   border: none;
   will-change: transform;
