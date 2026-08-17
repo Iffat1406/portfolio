@@ -3,9 +3,14 @@ import styled from 'styled-components';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Footer from '../components/Footer';
+import Tilt3D from '../components/Tilt3D';
+import ThreeCanvas from '../three/ThreeCanvas';
+import { projectScene } from '../three/scenes';
 import { PROJECTS } from '../data/profile';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const SHAPES = ['knot', 'octa', 'ico'];
 
 const Projects = () => {
   const pageRef = useRef(null);
@@ -50,11 +55,16 @@ const Projects = () => {
       <List className="proj-list">
         {PROJECTS.map((p, i) => (
           <Card key={p.slug} className="proj-card" $reverse={i % 2 === 1}>
-            <Visual $gradient={p.gradient} data-hover>
-              <VisualNum>{p.num}</VisualNum>
-              <VisualTitle>{p.title}</VisualTitle>
-              <VisualGrid />
-            </Visual>
+            <Tilt3D max={7} lift={30}>
+              <Visual $gradient={p.gradient} data-hover>
+                <VisualGrid />
+                <SceneLayer>
+                  <ThreeCanvas build={projectScene(SHAPES[i % SHAPES.length])} />
+                </SceneLayer>
+                <VisualNum>{p.num}</VisualNum>
+                <VisualTitle>{p.title}</VisualTitle>
+              </Visual>
+            </Tilt3D>
 
             <Body>
               <CardMetaRow>
@@ -122,7 +132,7 @@ const LineWrap = styled.div`
 const Title = styled.h1`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(4rem, 11vw, 13rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 0.92;
   text-transform: uppercase;
@@ -179,15 +189,21 @@ const Visual = styled.div`
   aspect-ratio: 4/3;
   border-radius: ${({ theme }) => theme.radius.lg};
   background: ${({ $gradient }) => $gradient};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   overflow: hidden;
   cursor: none;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: ${({ theme }) => theme.colors.shadow};
+  transition: box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
-    transform: translateY(-6px) scale(1.015);
-    box-shadow: ${({ theme }) => theme.colors.shadow};
+    box-shadow: ${({ theme }) => theme.colors.shadowAccent};
   }
+`;
+
+const SceneLayer = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 `;
 
 const VisualNum = styled.span`
@@ -198,7 +214,7 @@ const VisualNum = styled.span`
   font-size: 0.75rem;
   letter-spacing: 0.14em;
   color: rgba(255,255,255,0.6);
-  z-index: 1;
+  z-index: 2;
 `;
 
 const VisualTitle = styled.span`
@@ -208,11 +224,12 @@ const VisualTitle = styled.span`
   right: 1.75rem;
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.6rem, 3.5vw, 2.8rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1;
-  color: rgba(255,255,255,0.92);
-  z-index: 1;
+  color: rgba(255,255,255,0.94);
+  text-shadow: 0 2px 20px rgba(0,0,0,0.35);
+  z-index: 2;
 `;
 
 const Body = styled.div`
@@ -245,7 +262,7 @@ const CardYear = styled.span`
 const CardTitle = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.6rem, 3vw, 2.4rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1.08;
   color: ${({ theme }) => theme.colors.text};

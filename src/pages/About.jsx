@@ -1,134 +1,15 @@
 import { useRef, useEffect } from 'react';
-import * as THREE from 'three';
 import styled from 'styled-components';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import AboutStats from '../components/About';
 import Footer     from '../components/Footer';
+import Tilt3D     from '../components/Tilt3D';
+import ThreeCanvas from '../three/ThreeCanvas';
+import { orbScene } from '../three/scenes';
 import { TIMELINE, VALUES, PROFILE } from '../data/profile';
 
 gsap.registerPlugin(ScrollTrigger);
-
-// ─── Vanilla Three.js orb ────────────────────────────────────────────────────
-
-const OrbCanvas = () => {
-  const mountRef = useRef(null);
-
-  useEffect(() => {
-    const mount = mountRef.current;
-    if (!mount) return;
-
-    const W = mount.clientWidth;
-    const H = mount.clientHeight;
-
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
-    renderer.setSize(W, H);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-    renderer.setClearColor(0x000000, 0);
-    mount.appendChild(renderer.domElement);
-
-    const scene  = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(48, W / H, 0.1, 100);
-    camera.position.z = 5.5;
-
-    scene.add(new THREE.AmbientLight(0xffffff, 0.3));
-    const pt1 = new THREE.PointLight(0xff4d00, 2.5, 20);
-    pt1.position.set(4, 6, 4);
-    scene.add(pt1);
-    const pt2 = new THREE.PointLight(0xffffff, 0.6, 20);
-    pt2.position.set(-5, -5, -4);
-    scene.add(pt2);
-
-    // Morphing orb — sphere with per-frame vertex displacement
-    const orbGeo = new THREE.SphereGeometry(2, 48, 48);
-    const origPos = orbGeo.attributes.position.array.slice(); // snapshot
-    const orbMat = new THREE.MeshStandardMaterial({
-      color: 0xff4d00, roughness: 0.05, metalness: 0.9,
-    });
-    const orb = new THREE.Mesh(orbGeo, orbMat);
-    scene.add(orb);
-
-    // Orbital particles
-    const COUNT = 80;
-    const pPos  = new Float32Array(COUNT * 3);
-    for (let i = 0; i < COUNT; i++) {
-      const theta = Math.random() * Math.PI * 2;
-      const phi   = Math.random() * Math.PI;
-      const r     = 2.8 + Math.random() * 1.5;
-      pPos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-      pPos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      pPos[i * 3 + 2] = r * Math.cos(phi);
-    }
-    const pGeo = new THREE.BufferGeometry();
-    pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-    const particles = new THREE.Points(
-      pGeo,
-      new THREE.PointsMaterial({ color: 0xff4d00, size: 0.04, transparent: true, opacity: 0.6 }),
-    );
-    scene.add(particles);
-
-    const onResize = () => {
-      const w = mount.clientWidth;
-      const h = mount.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    };
-    window.addEventListener('resize', onResize);
-
-    const posAttr = orbGeo.attributes.position;
-    let raf;
-    const t0 = performance.now();
-
-    const tick = () => {
-      raf = requestAnimationFrame(tick);
-      const t = (performance.now() - t0) * 0.001;
-
-      // Vertex displacement
-      for (let i = 0; i < posAttr.count; i++) {
-        const ox = origPos[i * 3];
-        const oy = origPos[i * 3 + 1];
-        const oz = origPos[i * 3 + 2];
-        const noise =
-          Math.sin(ox * 3 + t) *
-          Math.cos(oy * 3 + t * 0.7) *
-          Math.sin(oz * 2 + t * 1.3) * 0.35;
-        posAttr.setXYZ(i, ox * (1 + noise), oy * (1 + noise), oz * (1 + noise));
-      }
-      posAttr.needsUpdate = true;
-      orbGeo.computeVertexNormals();
-
-      orb.rotation.x = t * 0.08;
-      orb.rotation.y = t * 0.12;
-      particles.rotation.y = t * 0.09;
-
-      renderer.render(scene, camera);
-    };
-    tick();
-
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener('resize', onResize);
-      orbGeo.dispose();
-      orbMat.dispose();
-      renderer.dispose();
-      if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
-    };
-  }, []);
-
-  return <OrbMount ref={mountRef} />;
-};
-
-const OrbMount = styled.div`
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-
-  canvas {
-    width: 100% !important;
-    height: 100% !important;
-  }
-`;
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
@@ -169,7 +50,7 @@ const About = () => {
       {/* ── Hero ─────────────────────────────────────────────────── */}
       <HeroSection>
         <ThreeRight>
-          <OrbCanvas />
+          <ThreeCanvas build={orbScene} camZ={6.4} fov={48} />
         </ThreeRight>
 
         <HeroContent>
@@ -213,11 +94,13 @@ const About = () => {
           <ValLabel>Core Values</ValLabel>
           <ValGrid>
             {VALUES.map(({ icon, title, desc }) => (
-              <ValCard key={title} className="val-card">
-                <ValIcon>{icon}</ValIcon>
-                <ValTitle>{title}</ValTitle>
-                <ValDesc>{desc}</ValDesc>
-              </ValCard>
+              <Tilt3D key={title} className="val-card" max={8} lift={24}>
+                <ValCard>
+                  <ValIcon>{icon}</ValIcon>
+                  <ValTitle>{title}</ValTitle>
+                  <ValDesc>{desc}</ValDesc>
+                </ValCard>
+              </Tilt3D>
             ))}
           </ValGrid>
         </ValInner>
@@ -284,7 +167,7 @@ const LineWrap = styled.div`
 const HeroTitle = styled.h1`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(3.5rem, 9vw, 12rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 0.92;
   text-transform: uppercase;
@@ -322,7 +205,7 @@ const TlHeader = styled.div`
 const TlLabel = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.4rem, 3vw, 2.5rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   color: ${({ theme }) => theme.colors.text};
 `;
@@ -388,7 +271,7 @@ const ValInner = styled.div`
 const ValLabel = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.4rem, 3vw, 2.5rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   color: ${({ theme }) => theme.colors.text};
   padding-bottom: 1.5rem;
@@ -409,27 +292,33 @@ const ValCard = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  height: 100%;
   padding: 2.5rem;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
+  border-radius: ${({ theme }) => theme.radius.lg};
   background: ${({ theme }) => theme.colors.surface};
+  backdrop-filter: blur(8px);
   transition: border-color 0.3s ease, background 0.3s ease;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors.accent};
+    border-color: ${({ theme }) => theme.colors.accentLine};
     background: ${({ theme }) => theme.colors.surfaceHover};
   }
 `;
 
 const ValIcon = styled.span`
-  font-size: 1.5rem;
-  color: ${({ theme }) => theme.colors.accent};
+  font-size: 1.6rem;
+  line-height: 1;
+  background: ${({ theme }) => theme.colors.gradient};
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 `;
 
 const ValTitle = styled.h3`
   font-family: ${({ theme }) => theme.font.display};
   font-size: 1.2rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   color: ${({ theme }) => theme.colors.text};
 `;

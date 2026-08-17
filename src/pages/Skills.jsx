@@ -4,6 +4,9 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import About  from '../components/About';
 import Footer from '../components/Footer';
+import Tilt3D from '../components/Tilt3D';
+import ThreeCanvas from '../three/ThreeCanvas';
+import { globeScene } from '../three/scenes';
 import { SKILLS, TECH_COUNT } from '../data/profile';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -62,6 +65,10 @@ const Skills = () => {
   return (
     <Page ref={pageRef}>
       <PageHero>
+        <GlobeLayer>
+          <ThreeCanvas build={globeScene} camZ={7.4} fov={48} />
+        </GlobeLayer>
+
         <HeroInner>
           <Label className="skills-hero-fade">Technical Skills</Label>
           <HeroLines>
@@ -104,11 +111,13 @@ const Skills = () => {
           <SectionLabel>Focus Areas</SectionLabel>
           <FocusGrid className="focus-grid">
             {FOCUS.map(({ title, desc }, i) => (
-              <FocusCard key={title} className="focus-card">
-                <FocusNum>{(i + 1).toString().padStart(2, '0')}</FocusNum>
-                <FocusTitle>{title}</FocusTitle>
-                <FocusDesc>{desc}</FocusDesc>
-              </FocusCard>
+              <Tilt3D key={title} className="focus-card" max={8} lift={22}>
+                <FocusCard>
+                  <FocusNum>{(i + 1).toString().padStart(2, '0')}</FocusNum>
+                  <FocusTitle>{title}</FocusTitle>
+                  <FocusDesc>{desc}</FocusDesc>
+                </FocusCard>
+              </Tilt3D>
             ))}
           </FocusGrid>
         </FocusInner>
@@ -125,11 +134,30 @@ const Skills = () => {
 const Page = styled.main``;
 
 const PageHero = styled.section`
-  padding: 10rem 4vw 5rem;
+  position: relative;
+  padding: 11rem 4vw 6rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  overflow: hidden;
+`;
+
+const GlobeLayer = styled.div`
+  position: absolute;
+  top: 0;
+  right: -6%;
+  width: 58%;
+  height: 100%;
+  pointer-events: none;
+
+  @media (max-width: ${({ theme }) => theme.breakpoint.lg}) {
+    width: 100%;
+    right: 0;
+    opacity: 0.35;
+  }
 `;
 
 const HeroInner = styled.div`
+  position: relative;
+  z-index: 1;
   max-width: 1440px;
   margin: 0 auto;
   display: flex;
@@ -155,7 +183,7 @@ const LineWrap = styled.div`
 const Title = styled.h1`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(3.2rem, 9vw, 11rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 0.92;
   text-transform: uppercase;
@@ -186,7 +214,7 @@ const SkillsInner = styled.div`
 const SectionLabel = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.4rem, 3vw, 2.5rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   color: ${({ theme }) => theme.colors.text};
   padding-bottom: 1.5rem;
@@ -287,14 +315,16 @@ const FocusCard = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
+  height: 100%;
   padding: 2rem;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
+  border-radius: ${({ theme }) => theme.radius.lg};
   background: ${({ theme }) => theme.colors.surface};
+  backdrop-filter: blur(8px);
   transition: border-color 0.3s ease, background 0.3s ease;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors.accent};
+    border-color: ${({ theme }) => theme.colors.accentLine};
     background: ${({ theme }) => theme.colors.surfaceHover};
   }
 `;
@@ -309,7 +339,7 @@ const FocusNum = styled.span`
 const FocusTitle = styled.h3`
   font-family: ${({ theme }) => theme.font.display};
   font-size: 1.2rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   color: ${({ theme }) => theme.colors.text};
 `;

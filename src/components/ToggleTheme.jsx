@@ -1,7 +1,7 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import styled from "styled-components";
 import { gsap } from "gsap";
-import { useTheme } from "../theme/AppTheme";
+import { useTheme } from "../theme/ThemeContext";
 
 const ThemeToggle = () => {
   const { isDark, toggleTheme } = useTheme();
@@ -32,32 +32,36 @@ const ThemeToggle = () => {
 };
 
 const Button = styled.button`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.space[2]};
-  padding: ${({ theme }) => theme.space[2]} ${({ theme }) => theme.space[4]};
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.text};
-  font-family: ${({ theme }) => theme.font.body};
-  font-size: ${({ theme }) => theme.size.sm};
-  letter-spacing: ${({ theme }) => theme.tracking.wide};
-  text-transform: uppercase;
+  transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors.borderHover};
+    border-color: ${({ theme }) => theme.colors.accentLine};
     background: ${({ theme }) => theme.colors.surfaceHover};
+    color: ${({ theme }) => theme.colors.accent};
   }
 `;
 
 const Icon = styled.span`
   display: inline-block;
-  font-size: ${({ theme }) => theme.size.md};
+  font-size: 0.95rem;
+  line-height: 1;
 `;
 
 const Label = styled.span`
-  color: ${({ theme }) => theme.colors.textMuted};
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 `;
 
 export default ThemeToggle;

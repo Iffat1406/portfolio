@@ -132,7 +132,7 @@ const SmallTag = styled.span`
 const Headline = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.9rem, 4vw, 3.4rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1.1;
   color: ${({ theme }) => theme.colors.text};
@@ -209,28 +209,49 @@ const Right = styled.div`
 `;
 
 const StatBox = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.75rem 2rem;
+  gap: 1.5rem;
+  padding: 1.9rem 2.1rem;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
+  border-radius: ${({ theme }) => theme.radius.lg};
   background: ${({ theme }) => theme.colors.surface};
-  transition: border-color 0.3s ease, background 0.3s ease;
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.4s ${({ theme }) => theme.ease.out};
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: ${({ theme }) => theme.colors.gradient};
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.45s ${({ theme }) => theme.ease.out};
+  }
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.borderHover};
     background: ${({ theme }) => theme.colors.surfaceHover};
+    transform: translateX(6px);
   }
+
+  &:hover::before { transform: scaleY(1); }
 `;
 
 const StatNum = styled.span`
   font-family: ${({ theme }) => theme.font.display};
-  font-size: clamp(2.8rem, 5vw, 4.5rem);
-  font-weight: 800;
-  letter-spacing: -0.06em;
+  font-size: clamp(2.6rem, 4.6vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
   line-height: 1;
-  color: ${({ theme }) => theme.colors.text};
+  background: ${({ theme }) => theme.colors.gradient};
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 `;
 
 const StatLabel = styled.span`

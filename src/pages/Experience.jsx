@@ -1,93 +1,14 @@
 import { useRef, useEffect } from 'react';
-import * as THREE from 'three';
 import styled from 'styled-components';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Footer from '../components/Footer';
+import Tilt3D from '../components/Tilt3D';
+import ThreeCanvas from '../three/ThreeCanvas';
+import { networkScene } from '../three/scenes';
 import { EXPERIENCE, EDUCATION, PROFILE } from '../data/profile';
 
 gsap.registerPlugin(ScrollTrigger);
-
-// ─── Vanilla Three.js hero background ────────────────────────────────────────
-
-const TorusKnotCanvas = () => {
-  const mountRef = useRef(null);
-
-  useEffect(() => {
-    const mount = mountRef.current;
-    if (!mount) return;
-
-    const W = mount.clientWidth;
-    const H = mount.clientHeight;
-
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
-    renderer.setSize(W, H);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-    renderer.setClearColor(0x000000, 0);
-    mount.appendChild(renderer.domElement);
-
-    const scene  = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 100);
-    camera.position.z = 6;
-
-    scene.add(new THREE.AmbientLight(0xffffff, 0.3));
-    const dir = new THREE.DirectionalLight(0xffffff, 1);
-    dir.position.set(6, 8, 4);
-    scene.add(dir);
-    const pt = new THREE.PointLight(0xff4d00, 0.5, 25);
-    pt.position.set(-4, -4, -4);
-    scene.add(pt);
-
-    const knotGeo = new THREE.TorusKnotGeometry(1, 0.28, 180, 20);
-    const knotMat1 = new THREE.MeshStandardMaterial({
-      color: 0xffffff, wireframe: true, transparent: true, opacity: 0.18,
-    });
-    const knotMat2 = new THREE.MeshStandardMaterial({
-      color: 0xff4d00, wireframe: true, transparent: true, opacity: 0.1,
-    });
-    const knot1 = new THREE.Mesh(knotGeo, knotMat1);
-    const knot2 = new THREE.Mesh(knotGeo, knotMat2);
-    knot1.scale.setScalar(1.7);
-    knot2.scale.setScalar(1.7);
-    scene.add(knot1);
-    scene.add(knot2);
-
-    const onResize = () => {
-      const w = mount.clientWidth;
-      const h = mount.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    };
-    window.addEventListener('resize', onResize);
-
-    let raf;
-    const t0 = performance.now();
-    const tick = () => {
-      raf = requestAnimationFrame(tick);
-      const t = (performance.now() - t0) * 0.001;
-      knot1.rotation.x = t * 0.09;
-      knot1.rotation.y = t * 0.14;
-      knot1.rotation.z = t * 0.04;
-      knot2.rotation.x = -t * 0.05;
-      knot2.rotation.y = -t * 0.08;
-      renderer.render(scene, camera);
-    };
-    tick();
-
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener('resize', onResize);
-      knotGeo.dispose();
-      knotMat1.dispose();
-      knotMat2.dispose();
-      renderer.dispose();
-      if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
-    };
-  }, []);
-
-  return <BgMount ref={mountRef} />;
-};
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
@@ -135,7 +56,7 @@ const Experience = () => {
       {/* ── Hero ─────────────────────────────────────────────────── */}
       <HeroSection>
         <HeroBg>
-          <TorusKnotCanvas />
+          <ThreeCanvas build={networkScene} camZ={8.2} fov={52} />
         </HeroBg>
 
         <HeroContent>
@@ -167,40 +88,42 @@ const Experience = () => {
 
           <RolesList className="roles-list">
             {EXPERIENCE.map(role => (
-              <RoleCard key={role.id} className="role-card">
-                <RoleAside>
-                  <RolePeriod>{role.period}</RolePeriod>
-                  {role.current && (
-                    <CurrentBadge>
-                      <BadgeDot />
-                      Current
-                    </CurrentBadge>
-                  )}
-                  <RoleLocation>{role.location}</RoleLocation>
-                </RoleAside>
+              <Tilt3D key={role.id} className="role-card" max={4} lift={16}>
+                <RoleCard>
+                  <RoleAside>
+                    <RolePeriod>{role.period}</RolePeriod>
+                    {role.current && (
+                      <CurrentBadge>
+                        <BadgeDot />
+                        Current
+                      </CurrentBadge>
+                    )}
+                    <RoleLocation>{role.location}</RoleLocation>
+                  </RoleAside>
 
-                <RoleMain>
-                  <RoleTitle>{role.role}</RoleTitle>
-                  <RoleCompany>{role.company}</RoleCompany>
-                  <RoleDivider className="role-divider" />
-                  <RoleSummary>{role.summary}</RoleSummary>
+                  <RoleMain>
+                    <RoleTitle>{role.role}</RoleTitle>
+                    <RoleCompany>{role.company}</RoleCompany>
+                    <RoleDivider className="role-divider" />
+                    <RoleSummary>{role.summary}</RoleSummary>
 
-                  <PointList>
-                    {role.points.map(pt => (
-                      <Point key={pt}>
-                        <Bullet>—</Bullet>
-                        {pt}
-                      </Point>
-                    ))}
-                  </PointList>
+                    <PointList>
+                      {role.points.map(pt => (
+                        <Point key={pt}>
+                          <Bullet>—</Bullet>
+                          {pt}
+                        </Point>
+                      ))}
+                    </PointList>
 
-                  <StackRow>
-                    {role.stack.map(s => (
-                      <StackTag key={s}>{s}</StackTag>
-                    ))}
-                  </StackRow>
-                </RoleMain>
-              </RoleCard>
+                    <StackRow>
+                      {role.stack.map(s => (
+                        <StackTag key={s}>{s}</StackTag>
+                      ))}
+                    </StackRow>
+                  </RoleMain>
+                </RoleCard>
+              </Tilt3D>
             ))}
           </RolesList>
         </RolesInner>
@@ -249,16 +172,6 @@ const HeroBg = styled.div`
   pointer-events: none;
 `;
 
-const BgMount = styled.div`
-  width: 100%;
-  height: 100%;
-
-  canvas {
-    width: 100% !important;
-    height: 100% !important;
-  }
-`;
-
 const HeroContent = styled.div`
   position: relative;
   z-index: 1;
@@ -286,7 +199,7 @@ const LineWrap = styled.div`
 const HeroTitle = styled.h1`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(3.6rem, 10vw, 13rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 0.92;
   text-transform: uppercase;
@@ -334,7 +247,7 @@ const SectionHeader = styled.div`
 const SectionLabel = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.4rem, 3vw, 2.5rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   color: ${({ theme }) => theme.colors.text};
 `;
@@ -356,14 +269,16 @@ const RoleCard = styled.article`
   display: grid;
   grid-template-columns: 240px 1fr;
   gap: 2.5rem;
-  padding: 2.5rem;
+  height: 100%;
+  padding: 2.75rem;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.lg};
   background: ${({ theme }) => theme.colors.surface};
-  transition: border-color 0.35s ease, background 0.35s ease, transform 0.35s ease;
+  backdrop-filter: blur(8px);
+  transition: border-color 0.35s ease, background 0.35s ease;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors.accent};
+    border-color: ${({ theme }) => theme.colors.accentLine};
     background: ${({ theme }) => theme.colors.surfaceHover};
   }
 
@@ -431,7 +346,7 @@ const RoleMain = styled.div`
 const RoleTitle = styled.h3`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.4rem, 2.6vw, 2rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.035em;
   color: ${({ theme }) => theme.colors.text};
 `;
@@ -514,7 +429,7 @@ const EduInner = styled.div`
 const EduLabel = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.4rem, 3vw, 2.5rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   color: ${({ theme }) => theme.colors.text};
   padding-bottom: 1.5rem;

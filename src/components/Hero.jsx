@@ -83,9 +83,9 @@ const Hero = ({ ready }) => {
         </TopRow>
 
         <HeadingArea className="hero-heading">
-          {HEADLINE.map((word) => (
+          {HEADLINE.map((word, i) => (
             <LineWrap key={word}>
-              <Heading className="hero-line">{word}</Heading>
+              <Heading className="hero-line" $gradient={i === 1}>{word}</Heading>
             </LineWrap>
           ))}
         </HeadingArea>
@@ -140,20 +140,22 @@ const GridBg = styled.div`
   background-image:
     linear-gradient(${({ theme }) => theme.colors.border} 1px, transparent 1px),
     linear-gradient(90deg, ${({ theme }) => theme.colors.border} 1px, transparent 1px);
-  background-size: 80px 80px;
-  opacity: 0.4;
+  background-size: 96px 96px;
+  opacity: 0.55;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 45%, #000 15%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 45%, #000 15%, transparent 80%);
   pointer-events: none;
 `;
 
 const Glow = styled.div`
   position: absolute;
-  top: -10%;
-  right: -8%;
-  width: 55vw;
-  height: 55vw;
+  top: -18%;
+  right: -10%;
+  width: 62vw;
+  height: 62vw;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,77,0,0.08) 0%, transparent 65%);
-  filter: blur(60px);
+  background: ${({ theme }) => theme.colors.glow};
+  filter: blur(50px);
   pointer-events: none;
 `;
 
@@ -220,13 +222,20 @@ const LineWrap = styled.div`
 
 const Heading = styled.h1`
   font-family: ${({ theme }) => theme.font.display};
-  font-size: clamp(3.8rem, 11.5vw, 14rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 0.92;
+  font-size: clamp(3.2rem, 10.5vw, 12.5rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.94;
   text-transform: uppercase;
   color: ${({ theme }) => theme.colors.text};
   will-change: transform;
+
+  ${({ $gradient, theme }) => $gradient && `
+    background: ${theme.colors.gradient};
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  `}
 `;
 
 const BottomRow = styled.div`
@@ -264,12 +273,20 @@ const TagRow = styled.div`
 const Tag = styled.span`
   font-size: 0.7rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.28rem 0.7rem;
+  letter-spacing: 0.06em;
+  padding: 0.32rem 0.8rem;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 9999px;
-  color: ${({ theme }) => theme.colors.textSubtle};
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.textMuted};
+  backdrop-filter: blur(6px);
+  transition: border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.accentLine};
+    color: ${({ theme }) => theme.colors.accent};
+    transform: translateY(-2px);
+  }
 `;
 
 const MetaBlock = styled.div`

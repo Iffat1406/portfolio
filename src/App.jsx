@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Navbar }    from './components/Navbar';
 import CustomCursor  from './components/CustomCursor';
 import Preloader     from './components/Preloader';
+import { ScrollProgress, Grain, AmbientGlow } from './components/Chrome';
 import Home          from './pages/Home';
 import About         from './pages/About';
 import Experience    from './pages/Experience';
@@ -20,6 +21,9 @@ const App = () => {
   return (
     <>
       <CustomCursor />
+      <AmbientGlow />
+      <Grain />
+      <ScrollProgress />
 
       {!ready && <Preloader onComplete={() => setReady(true)} />}
 

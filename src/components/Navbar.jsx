@@ -158,10 +158,10 @@ const Nav = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 4vw;
-  background: ${({ theme }) => `${theme.colors.bg}e0`};
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  padding: 1.1rem 4vw;
+  background: ${({ theme }) => theme.colors.overlay};
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   will-change: transform;
 `;
@@ -172,17 +172,18 @@ const Logo = styled(Link)`
   gap: 0.45rem;
   font-family: ${({ theme }) => theme.font.display};
   font-size: 1.15rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
   color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
 `;
 
 const LogoDot = styled.span`
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: ${({ theme }) => theme.colors.accent};
+  background: ${({ theme }) => theme.colors.gradient};
+  box-shadow: 0 0 12px ${({ theme }) => theme.colors.accentLine};
   flex-shrink: 0;
 `;
 
@@ -193,26 +194,36 @@ const Accent = styled.span`
 const Links = styled.ul`
   display: flex;
   align-items: center;
-  gap: 2.5rem;
+  gap: 0.35rem;
   list-style: none;
+  padding: 0.3rem;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 9999px;
+  background: ${({ theme }) => theme.colors.surface};
 
-  @media (max-width: ${({ theme }) => theme.breakpoint.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoint.lg}) {
     display: none;
   }
 `;
 
 const NavLink = styled(Link)`
+  display: block;
+  position: relative;
+  padding: 0.45rem 1.05rem;
+  border-radius: 9999px;
   font-family: ${({ theme }) => theme.font.body};
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 500;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: ${({ theme, $active }) => $active ? theme.colors.text : theme.colors.textMuted};
+  color: ${({ theme, $active }) => ($active ? theme.colors.text : theme.colors.textMuted)};
+  background: ${({ theme, $active }) => ($active ? theme.colors.bgHover : 'transparent')};
   text-decoration: none;
-  transition: color 0.25s ease;
+  transition: color 0.25s ease, background 0.25s ease;
 
   &:hover {
     color: ${({ theme }) => theme.colors.text};
+    background: ${({ theme }) => theme.colors.surfaceHover};
   }
 `;
 
@@ -255,11 +266,11 @@ const CtaBtn = styled.a`
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.55rem 1.2rem;
-  background: ${({ theme }) => theme.colors.accent};
-  color: #fff;
+  padding: 0.6rem 1.3rem;
+  background: ${({ theme }) => theme.colors.gradient};
+  color: ${({ theme }) => theme.colors.accentText};
   font-family: ${({ theme }) => theme.font.body};
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -267,10 +278,12 @@ const CtaBtn = styled.a`
   border-radius: 9999px;
   border: none;
   will-change: transform;
-  transition: background 0.25s ease;
+  box-shadow: ${({ theme }) => theme.colors.shadowAccent};
+  transition: box-shadow 0.3s ease, filter 0.3s ease;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.accentHover};
+    filter: brightness(1.1);
+    box-shadow: 0 14px 34px -12px ${({ theme }) => theme.colors.accent};
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoint.md}) {
@@ -291,7 +304,7 @@ const Hamburger = styled.button`
   background: none;
   border: none;
 
-  @media (max-width: ${({ theme }) => theme.breakpoint.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoint.lg}) {
     display: flex;
   }
 `;
@@ -326,7 +339,7 @@ const MobileMenu = styled.div`
   transform: translateX(${({ $open }) => $open ? '0' : '100%'});
   transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
 
-  @media (min-width: ${({ theme }) => theme.breakpoint.md}) {
+  @media (min-width: ${({ theme }) => theme.breakpoint.lg}) {
     display: none;
   }
 `;
@@ -344,7 +357,7 @@ const MobileClose = styled.button`
 const MobileLink = styled(Link)`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(2.2rem, 8vw, 5rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1.15;
   color: ${({ theme }) => theme.colors.text};

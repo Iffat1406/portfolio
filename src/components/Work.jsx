@@ -5,6 +5,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { Link } from 'react-router-dom';
 import { PROJECTS } from '../data/profile';
+import ThreeCanvas from '../three/ThreeCanvas';
+import { projectScene } from '../three/scenes';
+
+const PREVIEW_SCENE = projectScene('knot');
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -113,10 +117,14 @@ const Work = () => {
         </ViewAll>
       </Inner>
 
-      {/* Floating hover image */}
+      {/* Floating hover preview — gradient swaps per project, the 3D solid
+          stays mounted so we never churn WebGL contexts while hovering. */}
       <FloatingImg ref={imgWrapRef} style={{ opacity: 0 }}>
-        {activeProject && <ImgGrad $gradient={activeProject.gradient} />}
-        {activeProject && <ImgLabel>{activeProject.title}</ImgLabel>}
+        <ImgGrad $gradient={activeProject?.gradient} />
+        <ImgScene>
+          <ThreeCanvas build={PREVIEW_SCENE} parallax={0} dpr={1.25} />
+        </ImgScene>
+        <ImgLabel>{activeProject?.title}</ImgLabel>
       </FloatingImg>
     </Section>
   );
@@ -149,7 +157,7 @@ const HeaderInner = styled.div`
 const SectionLabel = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.4rem, 3vw, 2.5rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   color: ${({ theme }) => theme.colors.text};
 `;
@@ -198,7 +206,7 @@ const RowNum = styled.span`
 const RowTitle = styled.span`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.25rem, 2.5vw, 2rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   color: ${({ theme, $active }) => $active ? theme.colors.accent : theme.colors.text};
   transition: color 0.3s ease;
@@ -290,30 +298,40 @@ const FloatingImg = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 280px;
-  height: 210px;
-  border-radius: 10px;
+  width: 300px;
+  height: 225px;
+  border-radius: ${({ theme }) => theme.radius.md};
   overflow: hidden;
   pointer-events: none;
   z-index: 50;
   will-change: transform;
+  box-shadow: ${({ theme }) => theme.colors.shadow};
+
+  @media (hover: none) { display: none; }
 `;
 
 const ImgGrad = styled.div`
-  width: 100%;
-  height: 100%;
-  background: ${({ $gradient }) => $gradient};
+  position: absolute;
+  inset: 0;
+  background: ${({ $gradient, theme }) => $gradient || theme.colors.bgElevated};
+  transition: background 0.35s ease;
+`;
+
+const ImgScene = styled.div`
+  position: absolute;
+  inset: 0;
 `;
 
 const ImgLabel = styled.span`
   position: absolute;
-  bottom: 1rem;
-  left: 1rem;
-  font-family: ${({ theme }) => theme.font.display};
-  font-size: 1.1rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: rgba(255,255,255,0.7);
+  bottom: 0.9rem;
+  left: 1.1rem;
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
 `;
 
 export default Work;

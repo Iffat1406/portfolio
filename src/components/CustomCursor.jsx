@@ -74,29 +74,36 @@ const CustomCursor = () => {
 
 const Dot = styled.div`
   position: fixed;
-  top: -4px;
-  left: -4px;
-  width: 8px;
-  height: 8px;
+  top: -3px;
+  left: -3px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: ${({ theme }) => theme.colors.accent};
+  box-shadow: 0 0 10px ${({ theme }) => theme.colors.accent};
   pointer-events: none;
   z-index: 9999;
   will-change: transform;
+
+  @media (hover: none) { display: none; }
 `;
 
 const Ring = styled.div`
   position: fixed;
-  top: -18px;
-  left: -18px;
-  width: 36px;
-  height: 36px;
-  border: 1.5px solid ${({ theme }) => theme.colors.text};
+  top: -17px;
+  left: -17px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid ${({ theme }) => theme.colors.accentLine};
+  background: ${({ theme }) => theme.colors.accentSoft};
+  backdrop-filter: blur(1px);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
   will-change: transform;
-  opacity: 0.6;
+  opacity: 0.9;
+
+  @media (hover: none) { display: none; }
 `;
 
 export default CustomCursor;

@@ -1,10 +1,8 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect } from "react";
 import { ThemeProvider as StyledProvider } from "styled-components";
 import { darkTheme, lightTheme } from "./theme";
 import { GlobalStyles } from "./GlobalStyles";
-
-const ThemeContext = createContext();
-export const useTheme = () => useContext(ThemeContext);
+import { ThemeContext } from "./ThemeContext";
 
 export const ThemeProvider = ({ children }) => {
   const [mode, setMode] = useState(() => {

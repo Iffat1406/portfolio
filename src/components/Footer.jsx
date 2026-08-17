@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Link } from 'react-router-dom';
+import ThreeCanvas from '../three/ThreeCanvas';
+import { waveScene } from '../three/scenes';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -64,13 +66,17 @@ const Footer = () => {
 
   return (
     <Section ref={sectionRef}>
+      <WaveLayer>
+        <ThreeCanvas build={waveScene} fov={55} />
+      </WaveLayer>
+
       <Inner>
         <CtaBlock>
           <CtaEyebrow>Open to new opportunities</CtaEyebrow>
           <CtaLines>
-            {["LET'S BUILD", 'SOMETHING.'].map(line => (
+            {["LET'S BUILD", 'SOMETHING.'].map((line, i) => (
               <CtaLineWrap key={line}>
-                <CtaLine className="footer-cta-line">{line}</CtaLine>
+                <CtaLine className="footer-cta-line" $gradient={i === 1}>{line}</CtaLine>
               </CtaLineWrap>
             ))}
           </CtaLines>
@@ -133,12 +139,25 @@ const Footer = () => {
 // ─── Styled ───────────────────────────────────────────────────────────────────
 
 const Section = styled.footer`
-  padding: 7rem 4vw 3rem;
+  position: relative;
+  padding: 8rem 4vw 3rem;
   background: ${({ theme }) => theme.colors.bgElevated};
   border-top: 1px solid ${({ theme }) => theme.colors.border};
+  overflow: hidden;
+`;
+
+const WaveLayer = styled.div`
+  position: absolute;
+  inset: 0;
+  opacity: 0.75;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 45%, #000 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 45%, #000 100%);
+  pointer-events: none;
 `;
 
 const Inner = styled.div`
+  position: relative;
+  z-index: 1;
   max-width: 1440px;
   margin: 0 auto;
   display: flex;
@@ -169,12 +188,19 @@ const CtaLineWrap = styled.div`
 
 const CtaLine = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
-  font-size: clamp(3rem, 9vw, 11rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 0.93;
+  font-size: clamp(2.6rem, 8.5vw, 10rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
   text-transform: uppercase;
   color: ${({ theme }) => theme.colors.text};
+
+  ${({ $gradient, theme }) => $gradient && `
+    background: ${theme.colors.gradient};
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  `}
 `;
 
 const EmailWrap = styled.div`
@@ -241,7 +267,7 @@ const BottomBar = styled.div`
 const FooterLogo = styled(Link)`
   font-family: ${({ theme }) => theme.font.display};
   font-size: 1.1rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
   color: ${({ theme }) => theme.colors.text};
   text-decoration: none;

@@ -1,19 +1,16 @@
 export const tokens = {
   colors: {
-    black:   '#0a0a0a',
-    white:   '#f5f5f0',
-    grey100: '#1a1a1a',
-    grey200: '#2a2a2a',
-    grey500: '#888888',
-    grey800: '#cccccc',
-    accent:  '#ff4d00',      // your brand accent
-    accentHover: '#e63d00',
+    ink:     '#080B14',
+    paper:   '#FBFCFE',
+    indigo:  '#6366F1',
+    cyan:    '#22D3EE',
+    violet:  '#A78BFA',
   },
 
   font: {
-    display:  '"Syne", sans-serif',
-    body:     '"DM Sans", sans-serif',
-    mono:     '"JetBrains Mono", monospace',
+    display:  '"Sora", "Segoe UI", sans-serif',
+    body:     '"Inter", "Segoe UI", sans-serif',
+    mono:     '"JetBrains Mono", ui-monospace, monospace',
   },
 
   size: {
@@ -64,9 +61,10 @@ export const tokens = {
   },
 
   radius: {
-    sm:   '4px',
-    md:   '8px',
-    lg:   '16px',
+    sm:   '6px',
+    md:   '12px',
+    lg:   '18px',
+    xl:   '28px',
     full: '9999px',
   },
 
