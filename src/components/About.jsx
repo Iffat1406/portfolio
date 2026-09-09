@@ -133,7 +133,7 @@ const Headline = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.9rem, 4vw, 3.4rem);
   font-weight: 700;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.008em;
   line-height: 1.1;
   color: ${({ theme }) => theme.colors.text};
 `;
@@ -246,7 +246,7 @@ const StatNum = styled.span`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(2.6rem, 4.6vw, 4rem);
   font-weight: 700;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.012em;
   line-height: 1;
   background: ${({ theme }) => theme.colors.gradient};
   -webkit-background-clip: text;

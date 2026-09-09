@@ -14,76 +14,103 @@ const shared = {
   breakpoint: tokens.breakpoint,
 };
 
-// ─── Deep Ink + Electric Indigo ───────────────────────────────────────────────
-// A two-accent system: indigo carries structure and links, cyan carries
-// highlights, data and 3D light. Both read cleanly in either mode.
+// ─── Blush Atelier ────────────────────────────────────────────────────────────
+// A pastel two-accent system: rose carries structure, links and emphasis;
+// lavender carries highlights, data and 3D light. Light mode is the primary
+// canvas — warm blush paper, plum ink. Dark mode is a deep plum dusk that keeps
+// the same pastels rather than falling back to cold slate.
+//
+// `onGradient*` and `gridLine` are deliberately mode-independent: they sit on
+// the pastel project cards, which keep the same tint in both palettes.
 
-export const darkTheme = {
-  ...shared,
-  mode: 'dark',
-  colors: {
-    bg:          '#080B14',
-    bgSubtle:    '#0B101C',
-    bgElevated:  '#101728',
-    bgHover:     '#161F35',
-
-    text:        '#E9EDF7',
-    textMuted:   '#95A2C0',
-    textSubtle:  '#5D6A8B',
-
-    border:      '#1A2336',
-    borderHover: '#2F3D5C',
-
-    accent:      '#6366F1',
-    accentHover: '#818CF8',
-    accent2:     '#22D3EE',
-    accentText:  '#FFFFFF',
-    accentSoft:  'rgba(99,102,241,0.14)',
-    accentLine:  'rgba(99,102,241,0.38)',
-
-    gradient:    'linear-gradient(120deg, #6366F1 0%, #818CF8 45%, #22D3EE 100%)',
-    glow:        'radial-gradient(circle, rgba(99,102,241,0.20) 0%, rgba(34,211,238,0.08) 40%, transparent 68%)',
-
-    surface:      'rgba(255,255,255,0.035)',
-    surfaceHover: 'rgba(255,255,255,0.07)',
-    overlay:      'rgba(8,11,20,0.82)',
-    shadow:       '0 24px 70px -20px rgba(0,0,0,0.85)',
-    shadowAccent: '0 22px 60px -22px rgba(99,102,241,0.55)',
-    grain:        0.035,
-  },
+const onPastel = {
+  onGradient:       '#3A2233',
+  onGradientMuted:  'rgba(58,34,51,0.60)',
+  gridLine:         'rgba(58,34,51,0.055)',
 };
 
 export const lightTheme = {
   ...shared,
   mode: 'light',
   colors: {
-    bg:          '#FBFCFE',
-    bgSubtle:    '#F2F5FB',
-    bgElevated:  '#EAEFF8',
-    bgHover:     '#E1E8F4',
+    bg:          '#FFFAFC',
+    bgSubtle:    '#FDF2F7',
+    bgElevated:  '#FFFFFF',
+    bgHover:     '#FBE9F1',
 
-    text:        '#0B1220',
-    textMuted:   '#4C5871',
-    textSubtle:  '#7C8AA3',
+    text:        '#3A2233',
+    textMuted:   '#7A5C70',
+    textSubtle:  '#886A7C',
 
-    border:      '#DEE5F0',
-    borderHover: '#BAC6DC',
+    border:      '#EFD6E3',
+    borderHover: '#E4C2D5',
 
-    accent:      '#4F46E5',
-    accentHover: '#4338CA',
-    accent2:     '#0891B2',
+    accent:      '#B94F82',
+    accentHover: '#8E3159',
+    accent2:     '#6F5AC6',
     accentText:  '#FFFFFF',
-    accentSoft:  'rgba(79,70,229,0.09)',
-    accentLine:  'rgba(79,70,229,0.30)',
+    accentSoft:  'rgba(185,79,130,0.10)',
+    accentLine:  'rgba(185,79,130,0.32)',
 
-    gradient:    'linear-gradient(120deg, #4F46E5 0%, #6366F1 45%, #0891B2 100%)',
-    glow:        'radial-gradient(circle, rgba(79,70,229,0.14) 0%, rgba(8,145,178,0.06) 40%, transparent 68%)',
+    success:     '#268F6C',
 
-    surface:      'rgba(11,18,32,0.025)',
-    surfaceHover: 'rgba(11,18,32,0.05)',
-    overlay:      'rgba(251,252,254,0.82)',
-    shadow:       '0 24px 60px -22px rgba(16,24,40,0.20)',
-    shadowAccent: '0 22px 55px -24px rgba(79,70,229,0.35)',
-    grain:        0.02,
+    gradient:    'linear-gradient(120deg, #B94F82 0%, #A96BB8 50%, #6F5AC6 100%)',
+    glow:        'radial-gradient(circle, rgba(247,200,220,0.55) 0%, rgba(190,170,240,0.20) 42%, transparent 70%)',
+
+    // Flat colours (not gradients) — the page-wide pastel wash on <body>
+    wash1:       'rgba(247,200,220,0.30)',
+    wash2:       'rgba(188,169,246,0.20)',
+
+    surface:      'rgba(58,34,51,0.025)',
+    surfaceHover: 'rgba(58,34,51,0.055)',
+    overlay:      'rgba(255,250,252,0.85)',
+    shadow:       '0 24px 60px -22px rgba(150,90,120,0.22)',
+    shadowAccent: '0 22px 55px -24px rgba(185,79,130,0.38)',
+    grain:        0.018,
+
+    ...onPastel,
+  },
+};
+
+export const darkTheme = {
+  ...shared,
+  mode: 'dark',
+  colors: {
+    bg:          '#18101F',
+    bgSubtle:    '#1E1527',
+    bgElevated:  '#261B31',
+    bgHover:     '#30233C',
+
+    text:        '#F7EEF5',
+    textMuted:   '#C3AAC2',
+    textSubtle:  '#8C748C',
+
+    border:      '#2E2039',
+    borderHover: '#4C3757',
+
+    accent:      '#F2A2C4',
+    accentHover: '#F8BED7',
+    accent2:     '#BCA9F6',
+    accentText:  '#2A1522',
+    accentSoft:  'rgba(242,162,196,0.13)',
+    accentLine:  'rgba(242,162,196,0.36)',
+
+    success:     '#7FE3C0',
+
+    gradient:    'linear-gradient(120deg, #F2A2C4 0%, #DCB0EE 50%, #BCA9F6 100%)',
+    glow:        'radial-gradient(circle, rgba(242,162,196,0.20) 0%, rgba(188,169,246,0.10) 42%, transparent 68%)',
+
+    // Flat colours (not gradients) — the page-wide pastel wash on <body>
+    wash1:       'rgba(242,162,196,0.10)',
+    wash2:       'rgba(188,169,246,0.09)',
+
+    surface:      'rgba(255,255,255,0.04)',
+    surfaceHover: 'rgba(255,255,255,0.075)',
+    overlay:      'rgba(24,16,31,0.84)',
+    shadow:       '0 24px 70px -20px rgba(10,4,16,0.80)',
+    shadowAccent: '0 22px 60px -22px rgba(242,162,196,0.35)',
+    grain:        0.03,
+
+    ...onPastel,
   },
 };

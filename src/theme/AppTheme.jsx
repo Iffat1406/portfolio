@@ -6,14 +6,13 @@ import { ThemeContext } from "./ThemeContext";
 
 export const ThemeProvider = ({ children }) => {
   const [mode, setMode] = useState(() => {
-    // 1. Check localStorage first
+    // A returning visitor keeps whichever palette they chose
     const saved = localStorage.getItem("portfolio-theme");
-    if (saved) return saved;
+    if (saved === "light" || saved === "dark") return saved;
 
-    // 2. Fall back to OS preference
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
+    // Everyone else lands on the blush light palette — it is the intended
+    // first impression, so an OS-level dark preference does not override it.
+    return "light";
   });
 
   // Persist to localStorage on every change
@@ -22,19 +21,6 @@ export const ThemeProvider = ({ children }) => {
     // Also set data-theme on <html> for any CSS variable fallbacks
     document.documentElement.setAttribute("data-theme", mode);
   }, [mode]);
-
-  // Listen to OS preference changes
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = (e) => {
-      // Only auto-switch if user hasn't manually set a preference
-      if (!localStorage.getItem("portfolio-theme")) {
-        setMode(e.matches ? "dark" : "light");
-      }
-    };
-    media.addEventListener("change", handler);
-    return () => media.removeEventListener("change", handler);
-  }, []);
 
   const toggleTheme = () =>
     setMode((prev) => (prev === "dark" ? "light" : "dark"));

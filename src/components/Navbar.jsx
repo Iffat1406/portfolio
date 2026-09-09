@@ -173,7 +173,7 @@ const Logo = styled(Link)`
   font-family: ${({ theme }) => theme.font.display};
   font-size: 1.15rem;
   font-weight: 700;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.008em;
   color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
 `;
@@ -252,7 +252,7 @@ const StatusDot = styled.span`
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #22c55e;
+  background: ${({ theme }) => theme.colors.success};
   flex-shrink: 0;
   animation: pulse 2s ease-in-out infinite;
 
@@ -358,7 +358,7 @@ const MobileLink = styled(Link)`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(2.2rem, 8vw, 5rem);
   font-weight: 700;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.008em;
   line-height: 1.15;
   color: ${({ theme }) => theme.colors.text};
   text-decoration: none;

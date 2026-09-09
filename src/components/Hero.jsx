@@ -195,7 +195,7 @@ const BadgePulse = styled.span`
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #22c55e;
+  background: ${({ theme }) => theme.colors.success};
   flex-shrink: 0;
   animation: heroPulse 2s ease-in-out infinite;
 
@@ -224,7 +224,7 @@ const Heading = styled.h1`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(3.2rem, 10.5vw, 12.5rem);
   font-weight: 700;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.012em;
   line-height: 0.94;
   text-transform: uppercase;
   color: ${({ theme }) => theme.colors.text};

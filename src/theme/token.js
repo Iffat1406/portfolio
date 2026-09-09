@@ -1,14 +1,16 @@
 export const tokens = {
   colors: {
-    ink:     '#080B14',
-    paper:   '#FBFCFE',
-    indigo:  '#6366F1',
-    cyan:    '#22D3EE',
-    violet:  '#A78BFA',
+    ink:      '#3A2233',
+    paper:    '#FFFAFC',
+    rose:     '#C25E8E',
+    blush:    '#F7C8DC',
+    lavender: '#BCA9F6',
+    mint:     '#BFEAE0',
+    peach:    '#FBD9C4',
   },
 
   font: {
-    display:  '"Sora", "Segoe UI", sans-serif',
+    display:  '"Playfair Display", "Sora", Georgia, serif',
     body:     '"Inter", "Segoe UI", sans-serif',
     mono:     '"JetBrains Mono", ui-monospace, monospace',
   },
@@ -40,7 +42,7 @@ export const tokens = {
   },
 
   tracking: {
-    tight:  '-0.04em',
+    tight:  '-0.01em',
     normal: '0em',
     wide:   '0.1em',
     wider:  '0.2em',
@@ -61,10 +63,10 @@ export const tokens = {
   },
 
   radius: {
-    sm:   '6px',
-    md:   '12px',
-    lg:   '18px',
-    xl:   '28px',
+    sm:   '8px',
+    md:   '14px',
+    lg:   '22px',
+    xl:   '32px',
     full: '9999px',
   },
 

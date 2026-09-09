@@ -200,7 +200,7 @@ const HeroTitle = styled.h1`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(3.6rem, 10vw, 13rem);
   font-weight: 700;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.008em;
   line-height: 0.92;
   text-transform: uppercase;
   color: ${({ theme }) => theme.colors.text};
@@ -248,7 +248,7 @@ const SectionLabel = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.4rem, 3vw, 2.5rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.005em;
   color: ${({ theme }) => theme.colors.text};
 `;
 
@@ -322,7 +322,7 @@ const BadgeDot = styled.span`
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #22c55e;
+  background: ${({ theme }) => theme.colors.success};
   flex-shrink: 0;
   animation: rolePulse 2s ease-in-out infinite;
 
@@ -347,7 +347,7 @@ const RoleTitle = styled.h3`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.4rem, 2.6vw, 2rem);
   font-weight: 700;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.005em;
   color: ${({ theme }) => theme.colors.text};
 `;
 
@@ -430,7 +430,7 @@ const EduLabel = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.4rem, 3vw, 2.5rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.005em;
   color: ${({ theme }) => theme.colors.text};
   padding-bottom: 1.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
@@ -474,7 +474,7 @@ const EduDegree = styled.span`
   font-family: ${({ theme }) => theme.font.display};
   font-size: 1.15rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: 0em;
   color: ${({ theme }) => theme.colors.text};
 `;
 

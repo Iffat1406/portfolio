@@ -158,7 +158,7 @@ const SectionLabel = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.4rem, 3vw, 2.5rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.005em;
   color: ${({ theme }) => theme.colors.text};
 `;
 
@@ -207,7 +207,7 @@ const RowTitle = styled.span`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.25rem, 2.5vw, 2rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.005em;
   color: ${({ theme, $active }) => $active ? theme.colors.accent : theme.colors.text};
   transition: color 0.3s ease;
 `;
@@ -331,7 +331,7 @@ const ImgLabel = styled.span`
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.75);
+  color: ${({ theme }) => theme.colors.onGradientMuted};
 `;
 
 export default Work;

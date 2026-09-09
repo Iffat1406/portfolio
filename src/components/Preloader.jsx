@@ -87,7 +87,7 @@ const Count = styled.span`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(4rem, 13vw, 10rem);
   font-weight: 700;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.012em;
   line-height: 1;
   background: ${({ theme }) => theme.colors.gradient};
   -webkit-background-clip: text;

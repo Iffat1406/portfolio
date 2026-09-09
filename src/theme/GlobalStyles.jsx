@@ -37,6 +37,11 @@ export const GlobalStyles = createGlobalStyle`
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'ss01';
     overflow-x: hidden;
     cursor: none;
+    background-image:
+      radial-gradient(60rem 40rem at 8% -6%,   ${({ theme }) => theme.colors.wash1} 0%, transparent 70%),
+      radial-gradient(52rem 38rem at 100% 10%, ${({ theme }) => theme.colors.wash2} 0%, transparent 72%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -61,16 +66,24 @@ export const GlobalStyles = createGlobalStyle`
 
   ::selection {
     background: ${({ theme }) => theme.colors.accent};
-    color: #fff;
+    color: ${({ theme }) => theme.colors.accentText};
   }
 
-  ::-webkit-scrollbar       { width: 8px; }
+  ::-webkit-scrollbar       { width: 10px; }
   ::-webkit-scrollbar-track { background: ${({ theme }) => theme.colors.bgSubtle}; }
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.borderHover};
+    background: ${({ theme }) => theme.colors.accentLine};
+    border: 2px solid ${({ theme }) => theme.colors.bgSubtle};
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover { background: ${({ theme }) => theme.colors.accent}; }
+
+  /* Firefox */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: ${({ theme }) => theme.colors.accentLine}
+                     ${({ theme }) => theme.colors.bgSubtle};
+  }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }

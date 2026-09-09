@@ -314,24 +314,29 @@ const GEOMETRY_BY_KIND = {
   ico:  (THREE) => new THREE.IcosahedronGeometry(1.5, 1),
 };
 
+// Project cards keep their pastel gradient in both palettes, so the geometry
+// drawn on top is inked rather than accented — the accents would disappear.
+const CARD_INK      = '#8C6488';
+const CARD_INK_DEEP = '#5E4470';
+
 const projectCache = new Map();
 
 export const projectScene = (kind) => {
   if (!projectCache.has(kind)) {
-    projectCache.set(kind, ({ scene, camera, colors, THREE }) => {
+    projectCache.set(kind, ({ scene, camera, THREE }) => {
       camera.position.z = 4.6;
       const pivot = new THREE.Group();
       scene.add(pivot);
 
       const make = GEOMETRY_BY_KIND[kind] || GEOMETRY_BY_KIND.ico;
-      const outer = new THREE.Mesh(make(THREE), wire(THREE, '#ffffff', 0.30));
-      const inner = new THREE.Mesh(make(THREE), wire(THREE, colors.accent2, 0.55));
+      const outer = new THREE.Mesh(make(THREE), wire(THREE, CARD_INK, 0.30));
+      const inner = new THREE.Mesh(make(THREE), wire(THREE, CARD_INK_DEEP, 0.50));
       inner.scale.setScalar(0.72);
       pivot.add(outer, inner);
 
       const dust = new THREE.Points(
         new THREE.BufferGeometry().setAttribute('position', fibonacciSphere(THREE, 120, 3.1)),
-        new THREE.PointsMaterial({ color: '#ffffff', size: 0.03, transparent: true, opacity: 0.4 }),
+        new THREE.PointsMaterial({ color: CARD_INK, size: 0.03, transparent: true, opacity: 0.45 }),
       );
       pivot.add(dust);
 

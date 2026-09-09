@@ -107,7 +107,7 @@ export const PROJECTS = [
       'WebSocket-driven live notifications and production dashboards for workstation displays.',
       'PostgreSQL query and index tuning, plus security hardening based on VAPT recommendations.',
     ],
-    gradient: 'linear-gradient(135deg, #0E1130 0%, #312E81 55%, #6366F1 100%)',
+    gradient: 'linear-gradient(135deg, #FFE7F0 0%, #F7C8DC 52%, #DDA6D2 100%)',
   },
   {
     id:       2,
@@ -127,7 +127,7 @@ export const PROJECTS = [
       'Data ingestion APIs for weather-logger devices, with PostgreSQL storage tuned for high-frequency writes.',
       'Automated reporting, calibration tracking and alert management in production on AWS.',
     ],
-    gradient: 'linear-gradient(135deg, #041C26 0%, #0E5A6E 55%, #22D3EE 100%)',
+    gradient: 'linear-gradient(135deg, #E7F8F3 0%, #C3EAE2 52%, #A6D9E2 100%)',
   },
   {
     id:       3,
@@ -147,7 +147,7 @@ export const PROJECTS = [
       'Secure device communication and dashboard reporting, deployed with Docker on AWS EC2.',
       'Query and index optimization to support large-scale sensor data processing.',
     ],
-    gradient: 'linear-gradient(135deg, #16102E 0%, #4C1D95 55%, #A78BFA 100%)',
+    gradient: 'linear-gradient(135deg, #F1EAFD 0%, #DBC9F8 52%, #BCA9F6 100%)',
   },
 ];
 

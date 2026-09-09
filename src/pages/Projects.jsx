@@ -133,7 +133,7 @@ const Title = styled.h1`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(4rem, 11vw, 13rem);
   font-weight: 700;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.008em;
   line-height: 0.92;
   text-transform: uppercase;
   color: ${({ theme }) => theme.colors.text};
@@ -178,8 +178,8 @@ const VisualGrid = styled.div`
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px);
+    linear-gradient(${({ theme }) => theme.colors.gridLine} 1px, transparent 1px),
+    linear-gradient(90deg, ${({ theme }) => theme.colors.gridLine} 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
 `;
@@ -213,7 +213,7 @@ const VisualNum = styled.span`
   font-family: ${({ theme }) => theme.font.mono};
   font-size: 0.75rem;
   letter-spacing: 0.14em;
-  color: rgba(255,255,255,0.6);
+  color: ${({ theme }) => theme.colors.onGradientMuted};
   z-index: 2;
 `;
 
@@ -225,10 +225,10 @@ const VisualTitle = styled.span`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.6rem, 3.5vw, 2.8rem);
   font-weight: 700;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.008em;
   line-height: 1;
-  color: rgba(255,255,255,0.94);
-  text-shadow: 0 2px 20px rgba(0,0,0,0.35);
+  color: ${({ theme }) => theme.colors.onGradient};
+  text-shadow: 0 2px 20px rgba(255,255,255,0.35);
   z-index: 2;
 `;
 
@@ -263,7 +263,7 @@ const CardTitle = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 700;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.008em;
   line-height: 1.08;
   color: ${({ theme }) => theme.colors.text};
 `;

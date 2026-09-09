@@ -190,7 +190,7 @@ const CtaLine = styled.h2`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(2.6rem, 8.5vw, 10rem);
   font-weight: 700;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.012em;
   line-height: 0.95;
   text-transform: uppercase;
   color: ${({ theme }) => theme.colors.text};
@@ -231,7 +231,7 @@ const EmailLink = styled.a`
   font-family: ${({ theme }) => theme.font.display};
   font-size: clamp(1.1rem, 2.2vw, 2.2rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: 0em;
   color: ${({ theme }) => theme.colors.textMuted};
   text-decoration: none;
   will-change: transform;
@@ -268,7 +268,7 @@ const FooterLogo = styled(Link)`
   font-family: ${({ theme }) => theme.font.display};
   font-size: 1.1rem;
   font-weight: 700;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.008em;
   color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
 `;
