@@ -1,3 +1,5 @@
+import nsocCertificate from '../Image/certificate-Iffat Shaikh.png';
+
 // ─── Single source of truth for every piece of résumé content on the site ─────
 // Edit here and it updates across the whole portfolio.
 
@@ -148,6 +150,27 @@ export const PROJECTS = [
       'Query and index optimization to support large-scale sensor data processing.',
     ],
     gradient: 'linear-gradient(135deg, #F1EAFD 0%, #DBC9F8 52%, #BCA9F6 100%)',
+  },
+];
+
+// ─── Certificates ────────────────────────────────────────────────────────────
+// Drop a new image into src/Image/ , import it at the top of this file and add
+// an entry below — the certificates section and page pick it up automatically.
+
+export const CERTIFICATES = [
+  {
+    id:       'nsoc-2026',
+    title:    'Nexus Spring of Code 2026',
+    issuer:   'NSOC — Nexus Spring of Code',
+    type:     'Certificate of Participation',
+    year:     '2026',
+    credential: 'Rank 87 overall',
+    summary:
+      'Open-source contribution program. Recognised for dedicated participation ' +
+      'and contributions to open-source development, finishing at rank 87 among ' +
+      'all participants.',
+    skills:   ['Open Source', 'Git & GitHub', 'Collaboration'],
+    image:    nsocCertificate,
   },
 ];
 

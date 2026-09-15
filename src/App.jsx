@@ -12,6 +12,7 @@ import About         from './pages/About';
 import Experience    from './pages/Experience';
 import Projects      from './pages/Projects';
 import Skills        from './pages/Skills';
+import Certificates  from './pages/Certificates';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -35,6 +36,7 @@ const App = () => {
         <Route path="/experience" element={<Experience />}               />
         <Route path="/projects"   element={<Projects  />}                />
         <Route path="/skills"     element={<Skills    />}                />
+        <Route path="/certificates" element={<Certificates />}            />
         {/* Legacy paths from the template */}
         <Route path="/process"    element={<Navigate to="/experience" replace />} />
         <Route path="/journal"    element={<Navigate to="/projects"   replace />} />

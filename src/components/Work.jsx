@@ -1,55 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { Link } from 'react-router-dom';
 import { PROJECTS } from '../data/profile';
-import ThreeCanvas from '../three/ThreeCanvas';
-import { projectScene } from '../three/scenes';
-
-const PREVIEW_SCENE = projectScene('knot');
+import Tilt3D from './Tilt3D';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
-  const [hovered, setHovered] = useState(null);
-  const sectionRef  = useRef(null);
-  const imgWrapRef  = useRef(null);
-  const isLeaving   = useRef(false);
-
-  // Floating image follows cursor
-  const onMouseMove = (e) => {
-    gsap.to(imgWrapRef.current, {
-      x: e.clientX + 28,
-      y: e.clientY - 160,
-      duration: 0.45,
-      ease: 'power2.out',
-    });
-  };
-
-  const onEnter = (id) => {
-    isLeaving.current = false;
-    setHovered(id);
-    gsap.fromTo(imgWrapRef.current,
-      { opacity: 0, scale: 0.85, rotate: -3 },
-      { opacity: 1, scale: 1, rotate: 0, duration: 0.4, ease: 'power2.out' },
-    );
-  };
-
-  const onLeave = () => {
-    isLeaving.current = true;
-    gsap.to(imgWrapRef.current, {
-      opacity: 0,
-      scale: 0.88,
-      rotate: 2,
-      duration: 0.3,
-      ease: 'power2.in',
-      onComplete: () => {
-        if (isLeaving.current) setHovered(null);
-      },
-    });
-  };
+  const sectionRef = useRef(null);
 
   // Scroll reveal
   useEffect(() => {
@@ -64,14 +25,14 @@ const Work = () => {
           scrollTrigger: { trigger: '.work-header-inner', start: 'top 85%' },
         },
       );
-      gsap.fromTo('.work-row',
-        { opacity: 0, y: 28 },
+      gsap.fromTo('.work-card',
+        { opacity: 0, y: 36 },
         {
           opacity: 1, y: 0,
-          stagger: 0.07,
-          duration: 0.7,
+          stagger: 0.1,
+          duration: 0.8,
           ease: 'power3.out',
-          scrollTrigger: { trigger: '.work-rows', start: 'top 80%' },
+          scrollTrigger: { trigger: '.work-cards', start: 'top 82%' },
         },
       );
     }, sectionRef);
@@ -79,10 +40,8 @@ const Work = () => {
     return () => ctx.revert();
   }, []);
 
-  const activeProject = PROJECTS.find(p => p.id === hovered);
-
   return (
-    <Section ref={sectionRef} onMouseMove={onMouseMove}>
+    <Section ref={sectionRef}>
       <Inner>
         <SectionHeader>
           <HeaderInner className="work-header-inner">
@@ -91,41 +50,43 @@ const Work = () => {
           </HeaderInner>
         </SectionHeader>
 
-        <Rows className="work-rows">
+        {/* Cards sit side by side — one row on desktop, two up on tablet,
+            stacked only on phones. */}
+        <Cards className="work-cards">
           {PROJECTS.map((p) => (
-            <Row
-              key={p.id}
-              className="work-row"
-              onMouseEnter={() => onEnter(p.id)}
-              onMouseLeave={onLeave}
-              $active={hovered === p.id}
-            >
-              <RowNum>{p.num}</RowNum>
-              <RowTitle $active={hovered === p.id}>{p.title}</RowTitle>
-              <RowCategory>{p.category}</RowCategory>
-              <RowTags>
-                {p.tags.map(t => <RowTag key={t}>{t}</RowTag>)}
-              </RowTags>
-              <RowYear>{p.yearShort}</RowYear>
-              <RowArrow $visible={hovered === p.id}>&#8599;</RowArrow>
-            </Row>
+            <Tilt3D key={p.id} className="work-card" max={7} lift={24}>
+              <Card to="/projects" data-hover>
+                <Visual $gradient={p.gradient}>
+                  <VisualGrid />
+                  <VisualNum>{p.num}</VisualNum>
+                  <VisualTitle>{p.title}</VisualTitle>
+                </Visual>
+
+                <Body>
+                  <MetaRow>
+                    <CardCategory>{p.category}</CardCategory>
+                    <CardYear>{p.yearShort}</CardYear>
+                  </MetaRow>
+
+                  <CardSummary>{p.summary}</CardSummary>
+
+                  <TagRow>
+                    {p.tags.map(t => <Tag key={t}>{t}</Tag>)}
+                  </TagRow>
+
+                  <CardLink>
+                    Case study <CardArrow>&#8599;</CardArrow>
+                  </CardLink>
+                </Body>
+              </Card>
+            </Tilt3D>
           ))}
-        </Rows>
+        </Cards>
 
         <ViewAll to="/projects" data-hover>
           View all projects <Arrow>&#8599;</Arrow>
         </ViewAll>
       </Inner>
-
-      {/* Floating hover preview — gradient swaps per project, the 3D solid
-          stays mounted so we never churn WebGL contexts while hovering. */}
-      <FloatingImg ref={imgWrapRef} style={{ opacity: 0 }}>
-        <ImgGrad $gradient={activeProject?.gradient} />
-        <ImgScene>
-          <ThreeCanvas build={PREVIEW_SCENE} parallax={0} dpr={1.25} />
-        </ImgScene>
-        <ImgLabel>{activeProject?.title}</ImgLabel>
-      </FloatingImg>
     </Section>
   );
 };
@@ -143,7 +104,7 @@ const Inner = styled.div`
 `;
 
 const SectionHeader = styled.div`
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
 `;
 
 const HeaderInner = styled.div`
@@ -169,70 +130,122 @@ const SectionCount = styled.span`
   color: ${({ theme }) => theme.colors.textSubtle};
 `;
 
-const Rows = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Row = styled.div`
+const Cards = styled.div`
   display: grid;
-  grid-template-columns: 3rem 1fr auto auto 4rem 2.5rem;
-  align-items: center;
-  gap: 1.25rem;
-  padding: 1.75rem 1rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  cursor: none;
-  transition:
-    background 0.3s ease,
-    padding-left 0.35s cubic-bezier(0.16,1,0.3,1);
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 2rem;
 
-  ${({ $active, theme }) => $active && `
-    background: ${theme.colors.surface};
-    padding-left: 2rem;
-  `}
-
-  @media (max-width: ${({ theme }) => theme.breakpoint.md}) {
-    grid-template-columns: 2.5rem 1fr auto 2.5rem;
+  @media (max-width: ${({ theme }) => theme.breakpoint.sm}) {
+    grid-template-columns: 1fr;
   }
 `;
 
-const RowNum = styled.span`
+const Card = styled(Link)`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.lg};
+  background: ${({ theme }) => theme.colors.bgElevated};
+  text-decoration: none;
+  cursor: none;
+  transition: border-color 0.3s ease, box-shadow 0.4s ease;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.accentLine};
+    box-shadow: ${({ theme }) => theme.colors.shadow};
+  }
+`;
+
+const Visual = styled.div`
+  position: relative;
+  aspect-ratio: 4/3;
+  background: ${({ $gradient }) => $gradient};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  overflow: hidden;
+`;
+
+const VisualGrid = styled.div`
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(${({ theme }) => theme.colors.gridLine} 1px, transparent 1px),
+    linear-gradient(90deg, ${({ theme }) => theme.colors.gridLine} 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+`;
+
+const VisualNum = styled.span`
+  position: absolute;
+  top: 1.25rem;
+  left: 1.4rem;
+  font-family: ${({ theme }) => theme.font.mono};
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: ${({ theme }) => theme.colors.onGradientMuted};
+`;
+
+const VisualTitle = styled.span`
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.4rem;
+  right: 1.4rem;
+  font-family: ${({ theme }) => theme.font.display};
+  font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.008em;
+  line-height: 1;
+  color: ${({ theme }) => theme.colors.onGradient};
+  text-shadow: 0 2px 20px rgba(255,255,255,0.35);
+`;
+
+const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  flex: 1;
+  padding: 1.6rem 1.6rem 1.7rem;
+`;
+
+const MetaRow = styled.div`
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+`;
+
+const CardCategory = styled.span`
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.colors.accent};
+`;
+
+const CardYear = styled.span`
   font-family: ${({ theme }) => theme.font.mono};
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   color: ${({ theme }) => theme.colors.textSubtle};
 `;
 
-const RowTitle = styled.span`
-  font-family: ${({ theme }) => theme.font.display};
-  font-size: clamp(1.25rem, 2.5vw, 2rem);
-  font-weight: 700;
-  letter-spacing: -0.005em;
-  color: ${({ theme, $active }) => $active ? theme.colors.accent : theme.colors.text};
-  transition: color 0.3s ease;
-`;
-
-const RowCategory = styled.span`
-  font-size: 0.82rem;
-  font-weight: 400;
-  letter-spacing: 0.04em;
+const CardSummary = styled.p`
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.7;
   color: ${({ theme }) => theme.colors.textMuted};
-
-  @media (max-width: ${({ theme }) => theme.breakpoint.md}) {
-    display: none;
-  }
 `;
 
-const RowTags = styled.div`
+const TagRow = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 0.4rem;
-
-  @media (max-width: ${({ theme }) => theme.breakpoint.md}) {
-    display: none;
-  }
+  margin-top: auto;
+  padding-top: 0.9rem;
 `;
 
-const RowTag = styled.span`
+const Tag = styled.span`
   font-size: 0.65rem;
   font-weight: 500;
   letter-spacing: 0.09em;
@@ -243,24 +256,30 @@ const RowTag = styled.span`
   color: ${({ theme }) => theme.colors.textSubtle};
 `;
 
-const RowYear = styled.span`
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  color: ${({ theme }) => theme.colors.textSubtle};
-  text-align: right;
-
-  @media (max-width: ${({ theme }) => theme.breakpoint.md}) {
-    display: none;
-  }
+const CardArrow = styled.span`
+  display: inline-block;
+  transition: transform 0.3s ease;
 `;
 
-const RowArrow = styled.span`
-  font-size: 1.2rem;
-  color: ${({ theme }) => theme.colors.accent};
-  opacity: ${({ $visible }) => $visible ? 1 : 0};
-  transform: ${({ $visible }) => $visible ? 'translate(0,0)' : 'translate(-6px,6px)'};
-  transition: opacity 0.25s ease, transform 0.25s ease;
+const CardLink = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-top: 0.9rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.colors.textSubtle};
+  transition: color 0.25s ease;
+
+  ${Card}:hover & {
+    color: ${({ theme }) => theme.colors.accent};
+  }
+
+  ${Card}:hover & ${CardArrow} {
+    transform: translate(3px, -3px);
+  }
 `;
 
 const ViewAll = styled(Link)`
@@ -292,46 +311,6 @@ const Arrow = styled.span`
   ${ViewAll}:hover & {
     transform: translate(3px, -3px);
   }
-`;
-
-const FloatingImg = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 300px;
-  height: 225px;
-  border-radius: ${({ theme }) => theme.radius.md};
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 50;
-  will-change: transform;
-  box-shadow: ${({ theme }) => theme.colors.shadow};
-
-  @media (hover: none) { display: none; }
-`;
-
-const ImgGrad = styled.div`
-  position: absolute;
-  inset: 0;
-  background: ${({ $gradient, theme }) => $gradient || theme.colors.bgElevated};
-  transition: background 0.35s ease;
-`;
-
-const ImgScene = styled.div`
-  position: absolute;
-  inset: 0;
-`;
-
-const ImgLabel = styled.span`
-  position: absolute;
-  bottom: 0.9rem;
-  left: 1.1rem;
-  font-family: ${({ theme }) => theme.font.mono};
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: ${({ theme }) => theme.colors.onGradientMuted};
 `;
 
 export default Work;

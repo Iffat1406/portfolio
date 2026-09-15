@@ -11,6 +11,7 @@ const LINKS = [
   { label: 'Experience', path: '/experience' },
   { label: 'Projects',   path: '/projects'   },
   { label: 'Skills',     path: '/skills'     },
+  { label: 'Certificates', path: '/certificates' },
 ];
 
 export const Navbar = () => {
@@ -225,6 +226,13 @@ const NavLink = styled(Link)`
     color: ${({ theme }) => theme.colors.text};
     background: ${({ theme }) => theme.colors.surfaceHover};
   }
+
+  /* Six links have to share the pill — tighten up before the mobile menu kicks in */
+  @media (max-width: ${({ theme }) => theme.breakpoint.xl}) {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+  }
 `;
 
 const Right = styled.div`
@@ -243,7 +251,7 @@ const Status = styled.div`
   text-transform: uppercase;
   color: ${({ theme }) => theme.colors.textMuted};
 
-  @media (max-width: ${({ theme }) => theme.breakpoint.lg}) {
+  @media (max-width: ${({ theme }) => theme.breakpoint.xl}) {
     display: none;
   }
 `;
